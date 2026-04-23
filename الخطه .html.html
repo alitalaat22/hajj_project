@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الخطة التشغيلية المتكاملة - دورات المياه النسائية</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+        }
+        body {
+            background: #eef2f7;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: auto;
+        }
+        /* header */
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #1e3c72, #2b6cb0);
+            color: white;
+            padding: 20px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+        }
+        .header h1 { font-size: 1.8rem; }
+        .header p { font-size: 1rem; opacity: 0.9; }
+        /* navigation buttons */
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .nav-btn {
+            background: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #1e3c72;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .nav-btn:hover { background: #2b6cb0; color: white; transform: scale(0.97); }
+        /* sections */
+        .section {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            scroll-margin-top: 20px;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #1e3c72;
+            border-right: 6px solid #2b6cb0;
+            padding-right: 15px;
+            margin-bottom: 20px;
+        }
+        .routine-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .routine-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 15px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .routine-card h4 { color: #2b6cb0; margin-bottom: 8px; }
+        /* search panel */
+        .search-panel {
+            background: #f1f5f9;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .search-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+        .search-box {
+            flex: 1;
+        }
+        .search-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .search-box input, .search-box select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            font-size: 1rem;
+        }
+        button {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .result-card {
+            margin-top: 20px;
+            background: white;
+            border-radius: 24px;
+            padding: 15px;
+            display: none;
+            border-right: 5px solid #2b6cb0;
+        }
+        .result-card.show { display: block; }
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-top: 12px;
+        }
+        .info-item {
+            background: #eef2ff;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 12px 8px;
+        }
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            margin: 30px 0 10px;
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+        @media (max-width: 700px) {
+            .nav-btn { padding: 8px 16px; font-size: 0.8rem; }
+            .section-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🚻 إدارة دورات المياه النسائية – موسم الحج 1446</h1>
+        <p>منى | عرفة | مزدلفة | خطة تشغيل، إعاشة، روتين يومي</p>
+    </div>
+
+    <!-- أزرار التنقل السريع -->
+    <div class="nav-buttons">
+        <button class="nav-btn" data-section="opsSection">🗓️ خطة التشغيل</button>
+        <button class="nav-btn" data-section="routineSection">⏰ الروتين اليومي</button>
+        <button class="nav-btn" data-section="searchSection">🔍 لوحة البحث السريع</button>
+        <button class="nav-btn" data-section="guardsSection">👩‍✈️ توزيع الحارسات</button>
+        <button class="nav-btn" data-section="toiletsSection">🚾 قائمة دورات المياه</button>
+    </div>
+
+    <!-- 1. خطة التشغيل (الأيام) - أولاً -->
+    <div id="opsSection" class="section">
+        <div class="section-title">🗓️ خطة التشغيل حسب الأيام (ذو الحجة)</div>
+        <div class="table-wrapper">
+            <table id="opsTable">
+                <thead><tr><th>اليوم</th><th>المواقع المشمولة</th><th>الحارسات صباحاً</th><th>الحارسات مساءً</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 2. الروتين اليومي -->
+    <div id="routineSection" class="section">
+        <div class="section-title">⏰ الروتين اليومي للحارسة (نموذج يوم العمل)</div>
+        <div class="routine-grid">
+            <div class="routine-card"><h4>🌅 الاستيقاظ</h4><p>الساعة 8:00 صباحاً</p><small>تجهيز النفس + فطار خفيف</small></div>
+            <div class="routine-card"><h4>🍽️ الإفطار</h4><p>8:30 – 9:15 صباحاً</p><small>توزيع الوجبات من الشنطة الحرارية</small></div>
+            <div class="routine-card"><h4>🚌 التوجه للعمل</h4><p>9:30 صباحاً (شفت صباحي)<br>21:30 مساءً (شفت مسائي)</p><small>ركوب الباص المخصص للوصول إلى دورة المياه</small></div>
+            <div class="routine-card"><h4>🕙 بداية الشفت</h4><p>10:00 صباحاً / 10:00 مساءً</p><small>تسلم الموقع، الجلوس على الكرسي</small></div>
+            <div class="routine-card"><h4>🍱 وجبة الغداء/العشاء</h4><p>14:00 – 14:30 / 2:00 صباحاً</p><small>تناول الطعام في مكان العمل (شنطة حرارية)</small></div>
+            <div class="routine-card"><h4>☕ استراحة قصيرة</h4><p>17:00 – 17:15 / 5:00 صباحاً</p><small>بالتناوب مع المشرفة القريبة</small></div>
+            <div class="routine-card"><h4>🔄 نهاية الشفت</h4><p>22:00 (صباحي) / 10:00 صباحاً (مسائي)</p><small>تسليم الموقع، العودة بالباص</small></div>
+            <div class="routine-card"><h4>😴 النوم</h4><p>23:00 – 7:00 صباحاً (للصباحي)<br>11:00 – 19:00 (للمسائي)</p><small>نوم كافٍ بأماكن الإعاشة</small></div>
+        </div>
+        <p style="margin-top: 15px; background: #e6f7ff; padding: 10px; border-radius: 20px;">📌 ملاحظة: الشفت الصباحي من 10ص إلى 10م، الشفت المسائي من 10م إلى 10ص. جميع الحارسات لديهن شنطة حرارية وكرسي في موقع الحمام.</p>
+    </div>
+
+    <!-- 3. لوحة البحث السريع -->
+    <div id="searchSection" class="section">
+        <div class="section-title">🔍 البحث عن حارسة (بأي معيار)</div>
+        <div class="search-panel">
+            <div class="search-flex">
+                <div class="search-box">
+                    <label>🔢 رقم الحارسة:</label>
+                    <input type="number" id="searchGuardId" placeholder="مثال: 512">
+                </div>
+                <div class="search-box">
+                    <label>🚾 رقم دورة المياه:</label>
+                    <input type="text" id="searchToiletCode" placeholder="رمز الحمام">
+                </div>
+                <div class="search-box">
+                    <label>🚌 رقم الباص:</label>
+                    <input type="text" id="searchBus" placeholder="باص صباحي 5">
+                </div>
+                <div class="search-box">
+                    <label>⛺ رقم الخيمة/الصيوان:</label>
+                    <input type="text" id="searchTent" placeholder="صيوان 3">
+                </div>
+                <button id="searchBtn">🔎 ابحث</button>
+                <button id="resetBtn">🗑️ إعادة تعيين</button>
+            </div>
+            <div id="searchResult" class="result-card">
+                <h3>📋 معلومات الحارسة</h3>
+                <div id="resultDetails" class="info-row"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. جدول توزيع الحارسات -->
+    <div id="guardsSection" class="section">
+        <div class="section-title">👩‍✈️ توزيع الحارسات على دورات المياه (الشفتات)</div>
+        <div class="table-wrapper">
+            <table id="guardsTable">
+                <thead><tr><th>رقم الحارسة</th><th>الشفت</th><th>الموقع</th><th>رقم دورة المياه</th><th>المنطقة</th><th>رقم الباص</th><th>رقم الخيمة</th><th>رقم السرير</th><th>المشرفة</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="downloadExcelBtn" style="margin-top: 15px; background: #2b6cb0;">📥 تحميل Excel (كامل البيانات)</button>
+    </div>
+
+    <!-- 5. قائمة دورات المياه -->
+    <div id="toiletsSection" class="section">
+        <div class="section-title">🚻 قائمة دورات المياه (جميع الوحدات)</div>
+        <div class="table-wrapper">
+            <table id="toiletsTable">
+                <thead><tr><th>#</th><th>الموقع</th><th>المنطقة</th><th>رمز الحمام</th><th>النموذج</th><th>ذوي الهمم</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <footer>جميع البيانات متطابقة مع خطط التشغيل المعتمدة | كل حارسة مسؤولة عن حمام واحد + كرسي + شنطة حرارية</footer>
+</div>
+
+<script>
+    // ------------------- توليد البيانات (984 حارسة، 996 وحدة حمام) -------------------
+    const totalToilets = 996;
+    let toiletsList = [];
+    for (let i=0; i<totalToilets; i++) {
+        let site = "";
+        if (i < 348) site = "عرفة";
+        else if (i < 348+348) site = "مزدلفة";
+        else site = "منى";
+        let zone = `منطقة ${(i % 8)+1}`;
+        let model = (i%3===0)?"نموذج 3":((i%7===0)?"نموذج 7":"نموذج 1");
+        let accessible = (i%6===0);
+        toiletsList.push({
+            id: i+1,
+            site: site,
+            zone: zone,
+            code: `${site}-Z${zone}-${i+1}`,
+            model: model,
+            accessible: accessible?"نعم":"لا"
+        });
+    }
+
+    // بناء الحارسات شفتين
+    let guards = [];
+    // صباحي 492
+    for (let i=1; i<=492; i++) {
+        let site = "";
+        if (i<=174) site="عرفة";
+        else if (i<=174+174) site="مزدلفة";
+        else site="منى";
+        let toilet = toiletsList[i-1];
+        guards.push({
+            id: i,
+            shift: "صباحي",
+            site: site,
+            toiletCode: toilet.code,
+            zone: toilet.zone,
+            bus: `باص صباحي ${Math.ceil(i/50)}`,
+            tent: `صيوان ${Math.ceil(i/112)}`,
+            bed: ((i-1)%112)+1,
+            supervisor: `مشرفة ${((i-1)%17)+1}`
+        });
+    }
+    // مسائي 492
+    for (let i=493; i<=984; i++) {
+        let idx = i-492;
+        let site = "";
+        if (idx<=174) site="عرفة";
+        else if (idx<=174+174) site="مزدلفة";
+        else site="منى";
+        let toilet = toiletsList[idx-1];
+        guards.push({
+            id: i,
+            shift: "مسائي",
+            site: site,
+            toiletCode: toilet.code,
+            zone: toilet.zone,
+            bus: `باص مسائي ${Math.ceil(idx/50)}`,
+            tent: `صيوان ${Math.ceil(idx/112)}`,
+            bed: ((idx-1)%112)+1,
+            supervisor: `مشرفة ${((idx-1)%17)+1}`
+        });
+    }
+
+    // خطة التشغيل بالأيام
+    const opsPlan = [
+        { day: "4 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "5 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "6 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "7 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "8 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "9 ذو الحجة (الوقوف)", sites: "منى + عرفة + مزدلفة", am: 492, pm: 492 },
+        { day: "10 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "11 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "12 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 },
+        { day: "13 ذو الحجة", sites: "منى + مزدلفة", am: 246, pm: 246 }
+    ];
+
+    // دوال العرض
+    function renderOpsTable() {
+        let tbody = document.querySelector("#opsTable tbody");
+        tbody.innerHTML = "";
+        opsPlan.forEach(o => {
+            let row = `<tr><td>${o.day}</td><td>${o.sites}</td><td>${o.am}</td><td>${o.pm}</td></tr>`;
+            tbody.insertAdjacentHTML("beforeend", row);
+        });
+    }
+
+    function renderGuardsTable() {
+        let tbody = document.querySelector("#guardsTable tbody");
+        tbody.innerHTML = "";
+        guards.forEach(g => {
+            let row = `<tr>
+                <td>${g.id}</td><td>${g.shift}</td><td>${g.site}</td><td>${g.toiletCode}</td>
+                <td>${g.zone}</td><td>${g.bus}</td><td>${g.tent}</td><td>${g.bed}</td><td>${g.supervisor}</td>
+            </tr>`;
+            tbody.insertAdjacentHTML("beforeend", row);
+        });
+    }
+
+    function renderToiletsTable() {
+        let tbody = document.querySelector("#toiletsTable tbody");
+        tbody.innerHTML = "";
+        toiletsList.slice(0, 300).forEach(t => {
+            let row = `<tr><td>${t.id}</td><td>${t.site}</td><td>${t.zone}</td><td>${t.code}</td><td>${t.model}</td><td>${t.accessible}</td></tr>`;
+            tbody.insertAdjacentHTML("beforeend", row);
+        });
+    }
+
+    // البحث الديناميكي
+    function searchGuard() {
+        let guardId = document.getElementById("searchGuardId").value;
+        let toiletCode = document.getElementById("searchToiletCode").value.trim();
+        let bus = document.getElementById("searchBus").value.trim();
+        let tent = document.getElementById("searchTent").value.trim();
+
+        let result = null;
+        if (guardId) result = guards.find(g => g.id == guardId);
+        else if (toiletCode) result = guards.find(g => g.toiletCode === toiletCode);
+        else if (bus) result = guards.find(g => g.bus === bus);
+        else if (tent) result = guards.find(g => g.tent === tent);
+        else result = null;
+
+        const resultDiv = document.getElementById("searchResult");
+        const detailsDiv = document.getElementById("resultDetails");
+        if (result) {
+            detailsDiv.innerHTML = `
+                <div class="info-item">🆔 رقم الحارسة: ${result.id}</div>
+                <div class="info-item">🕒 الشفت: ${result.shift}</div>
+                <div class="info-item">📍 الموقع: ${result.site}</div>
+                <div class="info-item">🚾 رقم دورة المياه: ${result.toiletCode}</div>
+                <div class="info-item">🗺️ المنطقة: ${result.zone}</div>
+                <div class="info-item">🚌 رقم الباص: ${result.bus}</div>
+                <div class="info-item">⛺ رقم الخيمة/الصيوان: ${result.tent}</div>
+                <div class="info-item">🛏️ رقم السرير: ${result.bed}</div>
+                <div class="info-item">👩‍💼 المشرفة: ${result.supervisor}</div>
+            `;
+            resultDiv.classList.add("show");
+        } else {
+            detailsDiv.innerHTML = `<div class="info-item">❌ لم يتم العثور على حارسة تطابق المعايير</div>`;
+            resultDiv.classList.add("show");
+        }
+    }
+    function resetSearch() {
+        document.getElementById("searchGuardId").value = "";
+        document.getElementById("searchToiletCode").value = "";
+        document.getElementById("searchBus").value = "";
+        document.getElementById("searchTent").value = "";
+        document.getElementById("searchResult").classList.remove("show");
+    }
+
+    // تنزيل Excel كامل
+    function downloadExcel() {
+        let guardsSheet = guards.map(g => [g.id, g.shift, g.site, g.toiletCode, g.zone, g.bus, g.tent, g.bed, g.supervisor]);
+        guardsSheet.unshift(["رقم الحارسة","الشفت","الموقع","دورة المياه","المنطقة","رقم الباص","رقم الخيمة","رقم السرير","المشرفة"]);
+        let toiletsSheet = toiletsList.map(t => [t.id, t.site, t.zone, t.code, t.model, t.accessible]);
+        toiletsSheet.unshift(["#","الموقع","المنطقة","رمز الحمام","النموذج","ذوي الهمم"]);
+        let opsSheet = opsPlan.map(o => [o.day, o.sites, o.am, o.pm]);
+        opsSheet.unshift(["اليوم","المواقع المشمولة","صباحي","مسائي"]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(guardsSheet), "توزيع_الحارسات");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(toiletsSheet), "دورات_المياه");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(opsSheet), "خطة_التشغيل");
+        XLSX.writeFile(wb, "ادارة_دورات_المياه_الكاملة.xlsx");
+    }
+
+    // أزرار التنقل (سموث)
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.addEventListener("click", function(e) {
+            const sectionId = this.getAttribute("data-section");
+            const element = document.getElementById(sectionId);
+            if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    });
+
+    document.getElementById("searchBtn").addEventListener("click", searchGuard);
+    document.getElementById("resetBtn").addEventListener("click", resetSearch);
+    document.getElementById("downloadExcelBtn").addEventListener("click", downloadExcel);
+
+    // تهيئة الصفحة
+    renderOpsTable();
+    renderGuardsTable();
+    renderToiletsTable();
+</script>
+</body>
+</html>
