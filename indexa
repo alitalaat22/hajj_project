@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>الخطة التشغيلية للحراسات الأمنية - دورات المياه النسائية</title>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2b6cb0);
+            color: white;
+            padding: 20px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-area {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .logo-placeholder {
+            width: 300px;
+            height: 110px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 5px;
+        }
+
+        .left-logo {
+            width: 228px;
+            height: 148px;
+        }
+
+        .left-logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-text {
+            text-align: center;
+            flex: 2;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn,
+        .edit-btn,
+        .save-btn,
+        .reset-btn,
+        .add-btn,
+        .dev-btn {
+            background: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #1e3c72;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover,
+        .edit-btn:hover,
+        .save-btn:hover,
+        .dev-btn:hover {
+            background: #2b6cb0;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #ecc94b;
+            color: #744210;
+        }
+
+        .save-btn {
+            background: #38a169;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .add-btn {
+            background: #3182ce;
+            color: white;
+        }
+
+        .dev-btn {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            scroll-margin-top: 20px;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: #1e3c72;
+            border-right: 6px solid #2b6cb0;
+            padding-right: 15px;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #1e3c72;
+            color: white;
+            padding: 12px 8px;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .editable-cell {
+            background-color: #fff9e6;
+            cursor: text;
+        }
+
+        .routine-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .routine-card {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 15px;
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .routine-card input {
+            width: 100%;
+            padding: 5px;
+            margin-top: 8px;
+            border-radius: 20px;
+            border: 1px solid #cbd5e1;
+            text-align: center;
+        }
+
+        .search-panel {
+            background: #f1f5f9;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .search-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .search-box label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .search-box input,
+        .search-box select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+        }
+
+        button {
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .result-card {
+            margin-top: 20px;
+            background: white;
+            border-radius: 24px;
+            padding: 15px;
+            display: none;
+        }
+
+        .result-card.show {
+            display: block;
+        }
+
+        .info-item {
+            background: #eef2ff;
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .result-top {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .result-details {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .qr-box {
+            width: 170px;
+            min-height: 170px;
+            background: #f8fafc;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .qr-box img,
+        .qr-box canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 55px;
+            height: 55px;
+            background: #2b6cb0;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            display: none;
+            z-index: 999;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            max-width: 560px;
+            width: 92%;
+            text-align: center;
+            direction: rtl;
+        }
+
+        .modal-content button {
+            margin-top: 15px;
+            background: #2b6cb0;
+        }
+
+        .contact-link {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 15px;
+            background: #eef2ff;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #2b6cb0;
+            font-weight: bold;
+        }
+
+        .contact-link i {
+            margin-left: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin: 30px 0 10px;
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+
+        #scannerPreview {
+            width: 100%;
+            max-width: 420px;
+            height: 300px;
+            background: #0f172a;
+            border-radius: 18px;
+            object-fit: cover;
+            margin-top: 15px;
+        }
+
+        .scanner-status {
+            margin-top: 12px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .id-card {
+            width: 340px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+            border: 2px solid #1e3c72;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            margin: 0 auto;
+        }
+
+        .id-card-header {
+            background: linear-gradient(135deg, #1e3c72, #2b6cb0);
+            color: white;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .id-card-header h3 {
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .id-card-header p {
+            font-size: 0.78rem;
+            opacity: 0.92;
+        }
+
+        .id-card-body {
+            display: flex;
+            gap: 12px;
+            padding: 14px;
+            align-items: center;
+        }
+
+        .id-photo {
+            width: 78px;
+            height: 78px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e3c72;
+            font-size: 2rem;
+            flex-shrink: 0;
+            border: 1px solid #cbd5e1;
+        }
+
+        .id-info {
+            flex: 1;
+            text-align: right;
+            font-size: 0.86rem;
+            line-height: 1.75;
+            color: #0f172a;
+        }
+
+        .id-info strong {
+            color: #1e3c72;
+        }
+
+        .id-qr {
+            width: 92px;
+            min-height: 92px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            padding: 6px;
+        }
+
+        .id-card-footer {
+            background: #edf4ff;
+            padding: 10px 14px;
+            font-size: 0.78rem;
+            text-align: center;
+            color: #1e3c72;
+            border-top: 1px solid #dbeafe;
+        }
+
+        .id-card-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .print-btn {
+            background: #38a169;
+            color: white;
+        }
+
+        .close-btn {
+            background: #e53e3e;
+            color: white;
+        }
+
+        @media (max-width: 700px) {
+            .logo-placeholder {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .header-text h1 {
+                font-size: 1rem;
+            }
+
+            .qr-box {
+                width: 100%;
+                min-height: 150px;
+            }
+
+            .id-card {
+                width: 100%;
+            }
+
+            .id-card-body {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .id-qr {
+                width: 100%;
+                min-height: 120px;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+
+            #printArea,
+            #printArea * {
+                visibility: visible !important;
+            }
+
+            #printArea {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                width: 340px;
+                box-shadow: none !important;
+            }
+
+            .id-card-actions,
+            .modal,
+            .nav-buttons,
+            #scrollTopBtn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder"><img src="الهيئة الملكية .jpg" alt=""></div>
+            </div>
+            <div class="header-text">
+                <h1>📋 الخطة التشغيلية لمشروع الحراسات الأمنية على دورات المياه النسائية بالمشاعر المقدسة لموسم حج 1446
+                </h1>
+                <p>منى | عرفة | مزدلفة | خطة تشغيل، إعاشة، مهام يومية</p>
+            </div>
+            <div class="logo-placeholder left-logo">
+                <img src="شركة وشاح.jpg" alt="">
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" data-section="opsSection">🗓️ خطة التشغيل</button>
+            <button class="nav-btn" data-section="routineSection">📋 المهام اليومية</button>
+            <button class="nav-btn" data-section="searchSection">🔍 بحث</button>
+            <button class="nav-btn" data-section="guardsSection">👩‍✈️ الحارسات</button>
+            <button class="nav-btn" data-section="toiletsSection">🚾 دورات المياه</button>
+            <button class="edit-btn" id="enableEditBtn">✏️ تفعيل التعديل</button>
+            <button class="save-btn" id="saveDataBtn">💾 حفظ التغييرات</button>
+            <button class="reset-btn" id="resetDataBtn">🔄 إعادة تعيين</button>
+            <button class="add-btn" id="addGuardBtn">➕ إضافة حارسة</button>
+            <button class="add-btn" id="addToiletBtn">🚽 إضافة دورة مياه</button>
+            <button class="dev-btn" id="devBtn">👨‍💻 المطور</button>
+        </div>
+
+        <div id="opsSection" class="section">
+            <div class="section-title">🗓️ خطة التشغيل حسب الأيام (ذو الحجة)</div>
+            <div class="table-wrapper">
+                <table id="opsTable">
+                    <thead>
+                        <tr>
+                            <th>اليوم</th>
+                            <th>المواقع المشمولة</th>
+                            <th>الحارسات صباحاً</th>
+                            <th>الحارسات مساءً</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="routineSection" class="section">
+            <div class="section-title">📋 المهام اليومية (قابلة للتعديل)</div>
+            <div id="routineContainer" class="routine-grid"></div>
+        </div>
+
+        <div id="searchSection" class="section">
+            <div class="section-title">🔍 البحث السريع</div>
+            <div class="search-panel">
+                <div class="search-flex">
+                    <div class="search-box"><label>🔢 رقم الحارسة:</label><input type="number" id="searchId"
+                            placeholder="مثال: 512"></div>
+                    <div class="search-box"><label>📦 البار كود:</label><input type="text" id="searchBarcode"
+                            placeholder="باركود الحارسة..."></div>
+                    <div class="search-box"><label>🚾 رقم دورة المياه:</label><input type="text" id="searchToilet"
+                            placeholder="رمز دورة المياه"></div>
+                    <div class="search-box"><label>🚌 رقم الباص:</label><input type="text" id="searchBus"
+                            placeholder="باص صباحي 5"></div>
+                    <div class="search-box"><label>⛺ رقم الخيمة:</label><input type="text" id="searchTent"
+                            placeholder="صيوان 3"></div>
+                    <button id="doSearch"><i class="fas fa-search"></i> بحث</button>
+                    <button id="resetSearch"><i class="fas fa-undo-alt"></i> مسح</button>
+                    <button id="openScanner"><i class="fas fa-qrcode"></i> مسح بالكاميرا</button>
+                </div>
+                <div id="searchResult" class="result-card">
+                    <div class="result-top">
+                        <div class="result-details" id="resultDetails"></div>
+                        <div class="qr-box" id="qrCodeBox">
+                            <span style="color:#64748b; font-size:0.9rem;">سيظهر QR هنا</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="guardsSection" class="section">
+            <div class="section-title">👩‍✈️ توزيع الحارسات (البار كود)</div>
+            <div class="table-wrapper">
+                <table id="guardsTable">
+                    <thead>
+                        <tr>
+                            <th>رقم الحارسة</th>
+                            <th>البار كود</th>
+                            <th>الشفت</th>
+                            <th>الموقع</th>
+                            <th>رقم دورة المياه</th>
+                            <th>المنطقة</th>
+                            <th>رقم الباص</th>
+                            <th>رقم الخيمة</th>
+                            <th>رقم السرير</th>
+                            <th>المشرفة</th>
+                            <th>QR</th>
+                            <th>بطاقة</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="toiletsSection" class="section">
+            <div class="section-title">🚻 قائمة دورات المياه (جميع الوحدات)</div>
+            <div class="table-wrapper">
+                <table id="toiletsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الموقع</th>
+                            <th>المنطقة</th>
+                            <th>رمز دورة المياه</th>
+                            <th>النموذج</th>
+                            <th>لذوي الهمم</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>جميع الحقوق محفوظة © 2025 | نظام إدارة الحراسات الأمنية - المشاعر المقدسة</footer>
+    </div>
+
+    <button id="scrollTopBtn" title="العودة للأعلى">⬆️</button>
+
+    <div id="devModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-code" style="font-size: 3rem; color: #2b6cb0;"></i>
+            <h2 style="margin: 10px 0;">مهندس علي الشاعر</h2>
+            <p>
+                <a href="https://wa.me/201092530806" target="_blank" class="contact-link"><i
+                        class="fab fa-whatsapp"></i> +201092530806</a>
+                <a href="tel:+201092530806" class="contact-link"><i class="fas fa-phone-alt"></i> اتصال</a>
+            </p>
+            <p><strong>Software Engineering at Digilians</strong><br>Full-Stack MERN Developer | Building Scalable Web
+                Applications</p>
+            <p style="font-size: 0.85rem;">I am a results-oriented Software Engineering at Digilians (Digital Pioneers
+                Initiative), an intensive full-stack development program supported by the Ministry of Communications and
+                Information Technology (MCIT) in collaboration with the Egyptian Military Academy.</p>
+            <p style="font-size: 0.85rem;">Core Tech Stack: JavaScript (ES6+), React.js, Node.js, Express.js, MongoDB,
+                Python, C, SQL, Git, Docker.</p>
+            <p><a href="mailto:alitalaat.ah@gmail.com" class="contact-link"><i class="fas fa-envelope"></i>
+                    alitalaat.ah@gmail.com</a></p>
+            <button id="closeModal">إغلاق</button>
+        </div>
+    </div>
+
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-qrcode" style="font-size: 3rem; color: #2b6cb0;"></i>
+            <h2 style="margin: 10px 0;">مسح باركود / QR</h2>
+            <p>وجّه الكاميرا نحو الباركود أو الـ QR ليتم عرض بيانات الحارسة مباشرة.</p>
+            <video id="scannerPreview" playsinline></video>
+            <div class="scanner-status" id="scannerStatus">جاهز للمسح</div>
+            <button id="closeScanner">إغلاق</button>
+        </div>
+    </div>
+
+    <div id="idCardModal" class="modal">
+        <div class="modal-content" style="max-width: 420px;">
+            <div id="printArea">
+                <div class="id-card">
+                    <div class="id-card-header">
+                        <h3>بطاقة تعريف حارسة</h3>
+                        <p>الخطة التشغيلية - المشاعر المقدسة</p>
+                    </div>
+                    <div class="id-card-body">
+                        <div class="id-photo">👩‍✈️</div>
+                        <div class="id-info" id="idCardInfo"></div>
+                        <div class="id-qr" id="idCardQR"></div>
+                    </div>
+                    <div class="id-card-footer">هذه البطاقة معتمدة للاستخدام الميداني والطباعة المباشرة</div>
+                </div>
+            </div>
+            <div class="id-card-actions">
+                <button class="print-btn" id="printCardBtn">🖨️ طباعة</button>
+                <button class="close-btn" id="closeCardBtn">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let guardsData = [];
+        let toiletsData = [];
+        let opsData = [];
+        let routineData = [];
+        let editMode = false;
+
+        const MORNING_SHIFT = "10:00 صباحًا - 10:00 مساءً";
+        const EVENING_SHIFT = "10:00 مساءً - 10:00 صباحًا";
+
+        let scannerStream = null;
+        let scannerActive = false;
+        let scannerDetector = null;
+        let scanRequestId = null;
+
+        let currentCardGuard = null;
+
+        function initDefaultData() {
+            guardsData = [];
+            for (let i = 1; i <= 492; i++) {
+                let site = i <= 174 ? "عرفة" : (i <= 348 ? "مزدلفة" : "منى");
+                let barcode = `BAR${i.toString().padStart(5, '0')}`;
+                guardsData.push({
+                    id: i,
+                    barcode: barcode,
+                    shift: "صباحي",
+                    dutyTime: MORNING_SHIFT,
+                    site: site,
+                    toiletCode: `دورة-${i}`,
+                    zone: `منطقة ${(i % 8) + 1}`,
+                    bus: `باص صباحي ${Math.ceil(i / 50)}`,
+                    tent: `صيوان ${Math.ceil(i / 112)}`,
+                    bed: ((i - 1) % 112) + 1,
+                    supervisor: `مشرفة ${((i - 1) % 17) + 1}`
+                });
+            }
+
+            for (let i = 493; i <= 984; i++) {
+                let idx = i - 492;
+                let site = idx <= 174 ? "عرفة" : (idx <= 348 ? "مزدلفة" : "منى");
+                let barcode = `BAR${i.toString().padStart(5, '0')}`;
+                guardsData.push({
+                    id: i,
+                    barcode: barcode,
+                    shift: "مسائي",
+                    dutyTime: EVENING_SHIFT,
+                    site: site,
+                    toiletCode: `دورة-${idx}`,
+                    zone: `منطقة ${(idx % 8) + 1}`,
+                    bus: `باص مسائي ${Math.ceil(idx / 50)}`,
+                    tent: `صيوان ${Math.ceil(idx / 112)}`,
+                    bed: ((idx - 1) % 112) + 1,
+                    supervisor: `مشرفة ${((idx - 1) % 17) + 1}`
+                });
+            }
+
+            toiletsData = [];
+            for (let i = 1; i <= 996; i++) {
+                let site = i <= 348 ? "عرفة" : (i <= 696 ? "مزدلفة" : "منى");
+                toiletsData.push({
+                    id: i,
+                    site: site,
+                    zone: `منطقة ${(i % 8) + 1}`,
+                    code: `${site}-${i}`,
+                    model: i % 3 === 0 ? "نموذج 3" : "نموذج 1",
+                    accessible: i % 6 === 0 ? "نعم" : "لا"
+                });
+            }
+
+            opsData = [
+                { day: "4 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "5 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "6 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "7 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "8 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "9 ذو الحجة (الوقوف)", sites: "منى + عرفة + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "10 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "11 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "12 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT },
+                { day: "13 ذو الحجة", sites: "منى + مزدلفة", am: MORNING_SHIFT, pm: EVENING_SHIFT }
+            ];
+
+            routineData = [
+                { title: "🌅 الاستيقاظ", time: "8:00 صباحًا", desc: "تجهيز النفس + فطار خفيف" },
+                { title: "🍽️ الإفطار", time: "8:30 صباحًا – 9:15 صباحًا", desc: "توزيع الوجبات من الشنطة الحرارية" },
+                { title: "🚌 التوجه للعمل", time: "9:30 صباحًا (صباحي) / 9:30 مساءً (مسائي)", desc: "ركوب الباص" },
+                { title: "🕙 بداية الشفت", time: "10:00 صباحًا / 10:00 مساءً", desc: "تسلم الموقع والكرسي" },
+                { title: "🍱 وجبة", time: "2:00 مساءً / 2:00 صباحًا", desc: "تناول الطعام من الشنطة" },
+                { title: "☕ استراحة", time: "5:00 مساءً / 5:00 صباحًا", desc: "بالتناوب مع المشرفة" },
+                { title: "🔄 نهاية الشفت", time: "10:00 مساءً / 10:00 صباحًا", desc: "تسليم الموقع والعودة" },
+                { title: "😴 النوم", time: "11:00 مساءً / 11:00 صباحًا", desc: "نوم كافٍ بالإعاشة" }
+            ];
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem("guardsData", JSON.stringify(guardsData));
+            localStorage.setItem("toiletsData", JSON.stringify(toiletsData));
+            localStorage.setItem("opsData", JSON.stringify(opsData));
+            localStorage.setItem("routineData", JSON.stringify(routineData));
+            alert("✅ تم حفظ جميع البيانات بنجاح!");
+        }
+
+        function loadFromLocalStorage() {
+            if (localStorage.getItem("guardsData")) {
+                guardsData = JSON.parse(localStorage.getItem("guardsData"));
+                toiletsData = JSON.parse(localStorage.getItem("toiletsData"));
+                opsData = JSON.parse(localStorage.getItem("opsData"));
+                routineData = JSON.parse(localStorage.getItem("routineData"));
+            } else {
+                initDefaultData();
+            }
+        }
+
+        function renderOpsTable() {
+            let tbody = document.querySelector("#opsTable tbody");
+            tbody.innerHTML = "";
+            opsData.forEach((row, idx) => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="ops" data-field="day" data-idx="${idx}">${row.day}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="ops" data-field="sites" data-idx="${idx}">${row.sites}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="ops" data-field="am" data-idx="${idx}">${row.am}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="ops" data-field="pm" data-idx="${idx}">${row.pm}</td>`;
+                tbody.appendChild(tr);
+            });
+            if (editMode) attachCellEvents();
+        }
+
+        function renderRoutine() {
+            let container = document.getElementById("routineContainer");
+            container.innerHTML = "";
+            routineData.forEach((item, idx) => {
+                let card = document.createElement("div");
+                card.className = "routine-card";
+                card.innerHTML = `<h4>${item.title}</h4>
+                ${editMode ? `<input type="text" value="${item.time}" data-field="time" data-idx="${idx}" placeholder="الموعد">` : `<p>${item.time}</p>`}
+                ${editMode ? `<input type="text" value="${item.desc}" data-field="desc" data-idx="${idx}" placeholder="الوصف">` : `<small>${item.desc}</small>`}`;
+                container.appendChild(card);
+            });
+            if (editMode) {
+                document.querySelectorAll("#routineContainer input").forEach(inp => {
+                    inp.addEventListener("change", function () {
+                        let idx = this.getAttribute("data-idx");
+                        let field = this.getAttribute("data-field");
+                        if (field === "time") routineData[idx].time = this.value;
+                        if (field === "desc") routineData[idx].desc = this.value;
+                    });
+                });
+            }
+        }
+
+        function renderGuardsTable() {
+            let tbody = document.querySelector("#guardsTable tbody");
+            tbody.innerHTML = "";
+            guardsData.forEach((g, idx) => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="id" data-idx="${idx}">${g.id}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="barcode" data-idx="${idx}">${g.barcode}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="shift" data-idx="${idx}">${g.shift}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="site" data-idx="${idx}">${g.site}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="toiletCode" data-idx="${idx}">${g.toiletCode}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="zone" data-idx="${idx}">${g.zone}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="bus" data-idx="${idx}">${g.bus}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="tent" data-idx="${idx}">${g.tent}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="bed" data-idx="${idx}">${g.bed}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="guards" data-field="supervisor" data-idx="${idx}">${g.supervisor}</td>
+                    <td><button onclick="generateRowQR('${g.barcode}')">📱 QR</button></td>
+                    <td><button onclick="openIDCard(${idx})">🎫 بطاقة</button></td>`;
+                tbody.appendChild(tr);
+            });
+            if (editMode) attachCellEvents();
+        }
+
+        function renderToiletsTable() {
+            let tbody = document.querySelector("#toiletsTable tbody");
+            tbody.innerHTML = "";
+            toiletsData.forEach((t, idx) => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="id" data-idx="${idx}">${t.id}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="site" data-idx="${idx}">${t.site}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="zone" data-idx="${idx}">${t.zone}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="code" data-idx="${idx}">${t.code}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="model" data-idx="${idx}">${t.model}</td>
+                    <td class="${editMode ? 'editable-cell' : ''}" contenteditable="${editMode}" data-table="toilets" data-field="accessible" data-idx="${idx}">${t.accessible}</td>`;
+                tbody.appendChild(tr);
+            });
+            if (editMode) attachCellEvents();
+        }
+
+        function attachCellEvents() {
+            document.querySelectorAll(".editable-cell").forEach(cell => {
+                cell.removeEventListener("blur", cellUpdateHandler);
+                cell.addEventListener("blur", cellUpdateHandler);
+            });
+        }
+
+        function cellUpdateHandler(e) {
+            let cell = e.target;
+            let newValue = cell.innerText;
+            let field = cell.getAttribute("data-field");
+            let idx = parseInt(cell.getAttribute("data-idx"));
+            let table = cell.getAttribute("data-table");
+            if (table === "guards" && guardsData[idx]) guardsData[idx][field] = newValue;
+            else if (table === "toilets" && toiletsData[idx]) toiletsData[idx][field] = newValue;
+            else if (table === "ops" && opsData[idx]) opsData[idx][field] = newValue;
+        }
+
+        function addGuard() {
+            let newId = guardsData.length ? Math.max(...guardsData.map(g => g.id)) + 1 : 1;
+            let newBarcode = `BAR${newId.toString().padStart(5, '0')}`;
+            guardsData.push({
+                id: newId,
+                barcode: newBarcode,
+                shift: "صباحي",
+                dutyTime: MORNING_SHIFT,
+                site: "منى",
+                toiletCode: `دورة-جديدة-${newId}`,
+                zone: "منطقة 1",
+                bus: "باص جديد",
+                tent: "صيوان جديد",
+                bed: 1,
+                supervisor: "مشرفة جديدة"
+            });
+            renderGuardsTable();
+            alert(`تم إضافة حارسة جديدة برقم ${newId} وبار كود ${newBarcode}.`);
+        }
+
+        function addToilet() {
+            let newId = toiletsData.length ? Math.max(...toiletsData.map(t => t.id)) + 1 : 1;
+            toiletsData.push({
+                id: newId,
+                site: "منى",
+                zone: "منطقة 1",
+                code: `دورة-جديدة-${newId}`,
+                model: "نموذج 1",
+                accessible: "لا"
+            });
+            renderToiletsTable();
+            alert(`تم إضافة دورة مياه جديدة برقم ${newId}.`);
+        }
+
+        function buildResultCard(result) {
+            const detailsDiv = document.getElementById("resultDetails");
+            const qrBox = document.getElementById("qrCodeBox");
+
+            detailsDiv.innerHTML = `<div class="info-item">🆔 ${result.id}</div>
+                <div class="info-item">📦 ${result.barcode}</div>
+                <div class="info-item">🕒 ${result.shift}</div>
+                <div class="info-item">⏱️ ${result.dutyTime || (result.shift === 'مسائي' ? EVENING_SHIFT : MORNING_SHIFT)}</div>
+                <div class="info-item">📍 ${result.site}</div>
+                <div class="info-item">🚾 ${result.toiletCode}</div>
+                <div class="info-item">🚌 ${result.bus}</div>
+                <div class="info-item">⛺ ${result.tent}</div>
+                <div class="info-item">🛏️ ${result.bed}</div>
+                <div class="info-item">👩‍💼 ${result.supervisor}</div>`;
+
+            document.getElementById("searchResult").classList.add("show");
+            qrBox.innerHTML = "";
+
+            if (window.QRCode) {
+                new QRCode(qrBox, {
+                    text: JSON.stringify({
+                        id: result.id,
+                        barcode: result.barcode,
+                        shift: result.shift,
+                        dutyTime: result.dutyTime,
+                        site: result.site,
+                        toiletCode: result.toiletCode,
+                        zone: result.zone,
+                        bus: result.bus,
+                        tent: result.tent,
+                        bed: result.bed,
+                        supervisor: result.supervisor
+                    }),
+                    width: 150,
+                    height: 150,
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } else {
+                qrBox.innerHTML = `<div style="text-align:center; font-size:0.9rem; color:#64748b;">QR غير متاح</div>`;
+            }
+        }
+
+        function performSearch() {
+            let id = document.getElementById("searchId").value;
+            let barcode = document.getElementById("searchBarcode").value.trim();
+            let toilet = document.getElementById("searchToilet").value.trim();
+            let bus = document.getElementById("searchBus").value.trim();
+            let tent = document.getElementById("searchTent").value.trim();
+
+            let result = guardsData.find(g =>
+                (id && String(g.id) == String(id)) ||
+                (barcode && g.barcode === barcode) ||
+                (toilet && g.toiletCode.includes(toilet)) ||
+                (bus && g.bus.includes(bus)) ||
+                (tent && g.tent.includes(tent))
+            );
+
+            if (result) {
+                buildResultCard(result);
+                document.getElementById("searchResult").scrollIntoView({ behavior: "smooth" });
+            } else {
+                document.getElementById("resultDetails").innerHTML = "❌ لم يتم العثور على حارسة";
+                document.getElementById("qrCodeBox").innerHTML = "";
+                document.getElementById("searchResult").classList.add("show");
+            }
+        }
+
+        function generateRowQR(barcode) {
+            document.getElementById("searchResult").classList.add("show");
+            const qrBox = document.getElementById("qrCodeBox");
+            qrBox.innerHTML = "";
+            new QRCode(qrBox, {
+                text: String(barcode),
+                width: 150,
+                height: 150,
+                correctLevel: QRCode.CorrectLevel.M
+            });
+            document.getElementById("resultDetails").innerHTML =
+                `<div class="info-item">📦 ${barcode}</div><div class="info-item">تم توليد QR للحارسة</div>`;
+            document.getElementById("searchSection").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function resetSearch() {
+            document.getElementById("searchId").value = "";
+            document.getElementById("searchBarcode").value = "";
+            document.getElementById("searchToilet").value = "";
+            document.getElementById("searchBus").value = "";
+            document.getElementById("searchTent").value = "";
+            document.getElementById("searchResult").classList.remove("show");
+        }
+
+        function openIDCard(index) {
+            const g = guardsData[index];
+            currentCardGuard = g;
+
+            document.getElementById("idCardInfo").innerHTML = `
+                <div><strong>رقم الحارسة:</strong> ${g.id}</div>
+                <div><strong>البار كود:</strong> ${g.barcode}</div>
+                <div><strong>الشفت:</strong> ${g.shift}</div>
+                <div><strong>وقت الدوام:</strong> ${g.dutyTime || (g.shift === 'مسائي' ? EVENING_SHIFT : MORNING_SHIFT)}</div>
+                <div><strong>الموقع:</strong> ${g.site}</div>
+                <div><strong>دورة المياه:</strong> ${g.toiletCode}</div>
+                <div><strong>المنطقة:</strong> ${g.zone}</div>
+                <div><strong>الباص:</strong> ${g.bus}</div>
+                <div><strong>الخيمة:</strong> ${g.tent}</div>
+                <div><strong>السرير:</strong> ${g.bed}</div>
+                <div><strong>المشرفة:</strong> ${g.supervisor}</div>
+            `;
+
+            const qrBox = document.getElementById("idCardQR");
+            qrBox.innerHTML = "";
+            new QRCode(qrBox, {
+                text: JSON.stringify({
+                    id: g.id,
+                    barcode: g.barcode,
+                    shift: g.shift,
+                    dutyTime: g.dutyTime,
+                    site: g.site,
+                    toiletCode: g.toiletCode,
+                    zone: g.zone,
+                    bus: g.bus,
+                    tent: g.tent,
+                    bed: g.bed,
+                    supervisor: g.supervisor
+                }),
+                width: 80,
+                height: 80,
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            document.getElementById("idCardModal").style.display = "flex";
+        }
+
+        function printIDCard() {
+            window.print();
+        }
+
+        function closeIDCard() {
+            document.getElementById("idCardModal").style.display = "none";
+        }
+
+        function exportExcel() {
+            let guardsSheet = guardsData.map(g => [g.id, g.barcode, g.shift, g.dutyTime || "", g.site, g.toiletCode, g.zone, g.bus, g.tent, g.bed, g.supervisor]);
+            guardsSheet.unshift(["رقم الحارسة", "البار كود", "الشفت", "وقت الدوام", "الموقع", "دورة المياه", "المنطقة", "الباص", "الخيمة", "السرير", "المشرفة"]);
+
+            let toiletsSheet = toiletsData.map(t => [t.id, t.site, t.zone, t.code, t.model, t.accessible]);
+            toiletsSheet.unshift(["#", "الموقع", "المنطقة", "رمز دورة المياه", "النموذج", "ذوي الهمم"]);
+
+            let opsSheet = opsData.map(o => [o.day, o.sites, o.am, o.pm]);
+            opsSheet.unshift(["اليوم", "المواقع", "صباحي", "مسائي"]);
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(guardsSheet), "الحارسات");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(toiletsSheet), "دورات_المياه");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(opsSheet), "خطة_التشغيل");
+            XLSX.writeFile(wb, "الخطة_التشغيلية_دورات_المياه.xlsx");
+        }
+
+        function showDeveloper() { document.getElementById("devModal").style.display = "flex"; }
+        function closeModal() { document.getElementById("devModal").style.display = "none"; }
+
+        function handleScrollButton() {
+            const btn = document.getElementById("scrollTopBtn");
+            window.addEventListener("scroll", () => { btn.style.display = window.scrollY > 300 ? "block" : "none"; });
+            btn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+        }
+
+        function stopScanner() {
+            scannerActive = false;
+            if (scanRequestId) {
+                cancelAnimationFrame(scanRequestId);
+                scanRequestId = null;
+            }
+            if (scannerStream) {
+                scannerStream.getTracks().forEach(track => track.stop());
+                scannerStream = null;
+            }
+            const video = document.getElementById("scannerPreview");
+            if (video) video.srcObject = null;
+        }
+
+        async function startScanner() {
+            const modal = document.getElementById("scannerModal");
+            const status = document.getElementById("scannerStatus");
+            const video = document.getElementById("scannerPreview");
+            modal.style.display = "flex";
+            status.textContent = "جارٍ فتح الكاميرا...";
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                status.textContent = "المتصفح لا يدعم الكاميرا.";
+                return;
+            }
+
+            try {
+                scannerStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: "environment" } }
+                });
+                video.srcObject = scannerStream;
+                await video.play();
+                scannerActive = true;
+                status.textContent = "وجّه الكاميرا نحو QR أو الباركود.";
+
+                if (!("BarcodeDetector" in window)) {
+                    status.textContent = "المسح المباشر غير مدعوم في هذا المتصفح، لكن الكاميرا تعمل. استخدم البحث اليدوي أو افتح الصفحة في Chrome/Edge الحديث.";
+                    return;
+                }
+
+                try {
+                    scannerDetector = new BarcodeDetector({
+                        formats: ["qr_code", "code_128", "code_39", "ean_13", "ean_8", "upc_a", "upc_e"]
+                    });
+                } catch (e) {
+                    scannerDetector = new BarcodeDetector();
+                }
+
+                const scanLoop = async () => {
+                    if (!scannerActive) return;
+                    try {
+                        const codes = await scannerDetector.detect(video);
+                        if (codes && codes.length) {
+                            const rawValue = String(codes[0].rawValue || "").trim();
+                            if (rawValue) {
+                                handleScannedValue(rawValue);
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        // تجاهل خطأ الإطار الواحد
+                    }
+                    scanRequestId = requestAnimationFrame(scanLoop);
+                };
+
+                scanLoop();
+            } catch (err) {
+                status.textContent = "تعذر تشغيل الكاميرا. تأكد من الإذن أو استخدم البحث اليدوي.";
+            }
+        }
+
+        function handleScannedValue(value) {
+            stopScanner();
+            document.getElementById("scannerModal").style.display = "none";
+            document.getElementById("searchBarcode").value = value;
+
+            const result = guardsData.find(g => String(g.barcode).trim() === value || String(g.id) === value);
+            if (result) {
+                buildResultCard(result);
+                document.getElementById("searchResult").scrollIntoView({ behavior: "smooth" });
+            } else {
+                document.getElementById("resultDetails").innerHTML = `❌ تم قراءة الرمز: <strong>${value}</strong> ولكن لم يتم العثور على الحارسة`;
+                document.getElementById("qrCodeBox").innerHTML = "";
+                document.getElementById("searchResult").classList.add("show");
+            }
+        }
+
+        function bindEvents() {
+            document.getElementById("enableEditBtn").addEventListener("click", () => { editMode = true; renderAll(); });
+            document.getElementById("saveDataBtn").addEventListener("click", saveToLocalStorage);
+            document.getElementById("resetDataBtn").addEventListener("click", () => {
+                initDefaultData();
+                saveToLocalStorage();
+                loadFromLocalStorage();
+                editMode = false;
+                renderAll();
+                alert("تم إعادة التعيين");
+            });
+            document.getElementById("addGuardBtn").addEventListener("click", addGuard);
+            document.getElementById("addToiletBtn").addEventListener("click", addToilet);
+            document.getElementById("doSearch").addEventListener("click", performSearch);
+            document.getElementById("resetSearch").addEventListener("click", resetSearch);
+            document.getElementById("devBtn").addEventListener("click", showDeveloper);
+            document.getElementById("closeModal").addEventListener("click", closeModal);
+            document.getElementById("openScanner").addEventListener("click", startScanner);
+            document.getElementById("closeScanner").addEventListener("click", () => {
+                stopScanner();
+                document.getElementById("scannerModal").style.display = "none";
+            });
+
+            document.getElementById("printCardBtn").addEventListener("click", printIDCard);
+            document.getElementById("closeCardBtn").addEventListener("click", closeIDCard);
+
+            window.addEventListener("click", (e) => {
+                if (e.target === document.getElementById("devModal")) closeModal();
+                if (e.target === document.getElementById("scannerModal")) {
+                    stopScanner();
+                    document.getElementById("scannerModal").style.display = "none";
+                }
+                if (e.target === document.getElementById("idCardModal")) {
+                    closeIDCard();
+                }
+            });
+
+            document.querySelectorAll(".nav-btn").forEach(btn => btn.addEventListener("click", function () {
+                document.getElementById(this.getAttribute("data-section")).scrollIntoView({ behavior: "smooth" });
+            }));
+
+            let exportExcelBtn = document.createElement("button");
+            exportExcelBtn.innerText = "📎 تصدير Excel بالبيانات الحالية";
+            exportExcelBtn.style.background = "#2b6cb0";
+            exportExcelBtn.style.color = "white";
+            exportExcelBtn.addEventListener("click", exportExcel);
+            document.querySelector(".nav-buttons").appendChild(exportExcelBtn);
+        }
+
+        function renderAll() {
+            renderOpsTable();
+            renderRoutine();
+            renderGuardsTable();
+            renderToiletsTable();
+        }
+
+        loadFromLocalStorage();
+        renderAll();
+        bindEvents();
+        handleScrollButton();
+    </script>
+</body>
+
+</html>
